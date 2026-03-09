@@ -1,71 +1,159 @@
 package com.fsad3.main;
 
+import java.util.Scanner;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
 import com.fsad3.entity.Product;
 import com.fsad3.util.HibernateUtil;
 
 public class App {
+
     public static void main(String[] args) {
 
-        /* ================= INSERT ================= */
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
+        Scanner laptop = new Scanner(System.in);
 
-        Product p1 = new Product("Laptop", "Dell i5", 55000, 10);
-        Product p2 = new Product("Laptop", "HP i3", 42000, 8);
+        while (true) {
 
-        session.save(p1);
-        session.save(p2);
-//exp2
-        tx.commit();
-        session.close();
+            System.out.println("===== Product CRUD MENU =====");
+            System.out.println("1. Add Product");
+            System.out.println("2. View Product");
+            System.out.println("3. Update Product");
+            System.out.println("4. Delete Product");
+            System.out.println("5. Exit");
 
-        System.out.println("----- PRODUCTS INSERTED -----");
+            System.out.print("Enter your choice: ");
+            int windows = laptop.nextInt();
 
-        /* ================= RETRIEVE ================= */
-        session = HibernateUtil.getSessionFactory().openSession();
-        tx = session.beginTransaction();
+            Session phone = HibernateUtil.getSessionFactory().openSession();
+            Transaction apple = phone.beginTransaction();
 
-        int id = p1.getId();
-        Product product = session.get(Product.class, id);
+            switch (windows) {
 
-        if (product != null) {
-            System.out.println("\n----- PRODUCT DETAILS -----");
-            System.out.println("ID        : " + product.getId());
-            System.out.println("Name      : " + product.getName());
-            System.out.println("Desc      : " + product.getDescription());
-            System.out.println("Price     : " + product.getPrice());
-            System.out.println("Quantity  : " + product.getQuantity());
+            case 1:
 
-            /* ================= UPDATE ================= */
-            product.setPrice(52000);
-            product.setQuantity(15);
-            session.update(product);
+            	phone = HibernateUtil.getSessionFactory().openSession();
+            	apple = phone.beginTransaction();
 
-            System.out.println("\n----- AFTER UPDATE -----");
-            System.out.println("Updated Price    : " + product.getPrice());
-            System.out.println("Updated Quantity : " + product.getQuantity());
+                System.out.print("Enter ID: ");
+                int samsung = laptop.nextInt();
+                laptop.nextLine();
+
+                System.out.print("Enter Name: ");
+                String sony = laptop.nextLine();
+
+                System.out.print("Enter Description: ");
+                String dell = laptop.nextLine();
+
+                System.out.print("Enter Price: ");
+                double hp = laptop.nextDouble();
+
+                System.out.print("Enter Quantity: ");
+                int asus = laptop.nextInt();
+
+                Product lenovo = new Product(samsung, sony, dell, hp, asus);
+
+                phone.persist(lenovo);
+                apple.commit();
+
+                System.out.println("Product Added Successfully");
+
+                phone.close();
+
+            break;
+
+            case 2:
+
+                phone = HibernateUtil.getSessionFactory().openSession();
+
+                System.out.print("Enter Product ID: ");
+                int pid = laptop.nextInt();
+
+                Product dell1 = phone.get(Product.class, pid);
+
+                if(dell1 != null){
+
+                    System.out.println("ID: " + dell1.getId());
+                    System.out.println("Name: " + dell1.getName());
+                    System.out.println("Description: " + dell1.getDes());
+                    System.out.println("Price: " + dell1.getPrice());
+                    System.out.println("Quantity: " + dell1.getQuantity());
+
+                } else {
+
+                    System.out.println("Product Not Found");
+
+                }
+
+                phone.close();
+
+            break;
+
+            case 3:
+                // Update Product
+                System.out.print("Enter Product ID to Update: ");
+                int id = laptop.nextInt();
+
+                Product p = phone.get(Product.class, id);
+
+                if(p != null) {
+
+                    laptop.nextLine();
+
+                    System.out.print("Enter New Name: ");
+                    String name = laptop.nextLine();
+
+                    System.out.print("Enter New Description: ");
+                    String des = laptop.nextLine();
+
+                    System.out.print("Enter New Price: ");
+                    double price = laptop.nextDouble();
+
+                    System.out.print("Enter New Quantity: ");
+                    int quantity = laptop.nextInt();
+
+                    p.setName(name);
+                    p.setDes(des);
+                    p.setPrice(price);
+                    p.setQuantity(quantity);
+
+                    phone.update(p);
+                    apple.commit();
+
+                    System.out.println("Product Updated Successfully");
+
+                } else {
+                    System.out.println("Product Not Found");
+                }
+
+            break;
+
+            case 4:
+
+                System.out.print("Enter Product ID to Delete: ");
+                int pid1 = laptop.nextInt();
+
+                Product d = phone.get(Product.class, pid1);
+
+                if(d != null) {
+
+                    phone.delete(d);
+                    apple.commit();
+
+                    System.out.println("Product Deleted Successfully");
+
+                } else {
+                    System.out.println("Product Not Found");
+                }
+
+            break;
+
+            case 5:
+                System.exit(0);
+
+            }
+
+            phone.close();
         }
-
-        tx.commit();
-        session.close();
-
-        /* ================= DELETE ================= */
-        session = HibernateUtil.getSessionFactory().openSession();
-        tx = session.beginTransaction();
-
-        int deleteId = p2.getId();
-        Product del = session.get(Product.class, deleteId);
-
-        if (del != null) {
-            session.delete(del);
-            System.out.println("\n----- DELETE -----");
-            System.out.println("Product with ID " + deleteId + " deleted successfully");
-        }
-
-        tx.commit();
-        session.close();
     }
 }

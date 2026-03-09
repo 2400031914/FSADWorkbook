@@ -10,7 +10,7 @@
         <property name="hibernate.connection.url">
             jdbc:mysql://localhost:3306/hibernate_db
         </property>
-        //exp2
+       <!--> exp2 -->
 
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">root</property>
@@ -19,8 +19,8 @@
             org.hibernate.dialect.MySQLDialect
         </property>
 
-        <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.show_sql">false</property>
+        <property name="hibernate.format_sql">false</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
         <mapping class="com.fsad3.entity.Product"/>
